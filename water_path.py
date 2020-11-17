@@ -1,4 +1,5 @@
 from typing import List
+import sys
 
 def manhattan_distance(currentpos: List[int], goal: List[int]) -> int:
     return abs(currentpos[0] - goal[0]) + abs(currentpos[1] - goal[1])
@@ -78,14 +79,19 @@ def astar_search(grid, start, goal, heuristic=manhattan_distance, cost=1):
         iteration += 1
     return minDict, expanded
 
-def main():
-    f = open('medium.txt')
+def main(argv):
+
+    file = sys.argv[1] if argv else "small.txt"
+    f = open(file)
     grid = []
     for line in f:
         row = line.strip().split()
         row = [int(_) for _ in row]
         grid.append(row)
-
+    print("{} before running".format(file))
+    for row in grid:
+        print(row)
+    print()
     # always start in top left
     start = [0, 0]
     # goal is always bottom right
@@ -99,4 +105,4 @@ def main():
     print(minDict)
 
 if __name__ == '__main__':
-    main()
+    main(sys.argv[1:]) if sys.argv else main()
