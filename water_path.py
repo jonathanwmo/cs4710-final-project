@@ -2,6 +2,8 @@ from typing import List
 import sys
 import water_gui
 
+list_pos = []
+
 def manhattan_distance(currentpos: List[int], goal: List[int]) -> int:
     return abs(currentpos[0] - goal[0]) + abs(currentpos[1] - goal[1])
 
@@ -16,6 +18,7 @@ def astar_search(grid, start, goal, heuristic=manhattan_distance, cost=1):
     :return: expanded: 2D matrix of same size as grid, for each element, the count when it was expanded or -1 if
              the element was never expanded.
     """
+    global list_pos
     # list to hold the all possible best paths
     path = []
     iteration = 1 # to show at what point each path was expanded
@@ -76,12 +79,15 @@ def astar_search(grid, start, goal, heuristic=manhattan_distance, cost=1):
         h = minDict['h']
         x = minDict['currentpos'][0]
         y = minDict['currentpos'][1]
+        width = len(grid)
+        height = len(grid[0])
+        list_pos.append([y,x])
         expanded[x][y] = iteration # to show when the position was expanded
         iteration += 1
     return minDict, expanded
 
 def main(argv):
-
+    global list_pos
     file = sys.argv[1] if argv else "small.txt"
     f = open(file)
     grid = []
@@ -99,6 +105,7 @@ def main(argv):
     print()
     # always start in top left
     start = [0, 0]
+    list_pos.append(start)
     # goal is always bottom right
     goal = [len(grid) - 1, len(grid[0]) - 1]
 
@@ -108,7 +115,9 @@ def main(argv):
     for row in expand:
         print(row)
     print(minDict)
-    water_gui.run_game(width, height, grid)
+
+    # run gui
+    water_gui.run_game(width, height, grid, list_pos)
     
 
 if __name__ == '__main__':
