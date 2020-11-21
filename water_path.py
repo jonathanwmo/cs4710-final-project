@@ -1,5 +1,6 @@
 from typing import List
 import sys
+import water_gui
 
 def manhattan_distance(currentpos: List[int], goal: List[int]) -> int:
     return abs(currentpos[0] - goal[0]) + abs(currentpos[1] - goal[1])
@@ -84,10 +85,14 @@ def main(argv):
     file = sys.argv[1] if argv else "small.txt"
     f = open(file)
     grid = []
+    height = 0
     for line in f:
         row = line.strip().split()
+        width = len(row) # get the width for the display
+        height += 1 # get height for pygame display
         row = [int(_) for _ in row]
         grid.append(row)
+        
     print("{} before running".format(file))
     for row in grid:
         print(row)
@@ -103,6 +108,8 @@ def main(argv):
     for row in expand:
         print(row)
     print(minDict)
+    water_gui.run_game(width, height, grid)
+    
 
 if __name__ == '__main__':
     main(sys.argv[1:]) if sys.argv else main()
