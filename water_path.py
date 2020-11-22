@@ -3,6 +3,7 @@ import sys
 import water_gui
 
 list_pos = []
+best_pos = []
 
 def manhattan_distance(currentpos: List[int], goal: List[int]) -> int:
     return abs(currentpos[0] - goal[0]) + abs(currentpos[1] - goal[1])
@@ -18,7 +19,7 @@ def astar_search(grid, start, goal, heuristic=manhattan_distance, cost=1):
     :return: expanded: 2D matrix of same size as grid, for each element, the count when it was expanded or -1 if
              the element was never expanded.
     """
-    global list_pos
+    global list_pos, best_pos
     # list to hold the all possible best paths
     path = []
     iteration = 1 # to show at what point each path was expanded
@@ -49,6 +50,7 @@ def astar_search(grid, start, goal, heuristic=manhattan_distance, cost=1):
         for row in expanded: # see where we have expanded on each iteration
             print(row)
         print(minDict) # see the current f, g, h and position on each iteration
+        best_pos.append(minDict['currentpos'])
         print()
         for dx, dy in directions: # check all four directions
             x2 = x + dx
@@ -87,7 +89,7 @@ def astar_search(grid, start, goal, heuristic=manhattan_distance, cost=1):
     return minDict, expanded
 
 def main(argv):
-    global list_pos
+    global list_pos, best_pos
     file = sys.argv[1] if argv else "small.txt"
     f = open(file)
     grid = []
@@ -115,9 +117,10 @@ def main(argv):
     for row in expand:
         print(row)
     print(minDict)
+    best_pos.append(minDict['currentpos'])
 
     # run gui
-    water_gui.run_game(width, height, grid, list_pos)
+    water_gui.run_game(width, height, grid, list_pos, best_pos)
     
 
 if __name__ == '__main__':
