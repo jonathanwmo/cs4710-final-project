@@ -45,6 +45,7 @@ def astar_search(grid, start, goal, heuristic=manhattan_distance, cost=1):
         'currentpos': [x, y]
     }
 
+
     directions = [[0, 1], [0, -1], [1, 0], [-1, 0]] # 4 directions: right, left, down, up
     while minDict['currentpos'] != goal:
         for row in expanded: # see where we have expanded on each iteration
@@ -58,8 +59,9 @@ def astar_search(grid, start, goal, heuristic=manhattan_distance, cost=1):
             # check that we are in the bounds of the 2D grid
             if x2 in range(len(grid)) and y2 in range(len(grid[0])):
                 # check that we have not expanded that location before, and we can go to that location (there is a 0 there)
-                if (x2, y2) not in visited and grid[x2][y2] == 0:
+                if (x2, y2) not in visited and grid[x2][y2] != 1:
                     # update the costs
+                    cost = grid[x2][y2]
                     g2 = g + cost
                     h2 = heuristic([x2, y2], goal)
                     f2 = g2 + h2
@@ -87,6 +89,7 @@ def astar_search(grid, start, goal, heuristic=manhattan_distance, cost=1):
         expanded[x][y] = iteration # to show when the position was expanded
         iteration += 1
     return minDict, expanded
+
 
 def main(argv):
     global list_pos, best_pos
